@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 namespace MsLogger
 {
     /// <summary>
-    /// 2024-10-22 mskim 작성
+    /// 2024-10-22 작성
     /// 아래와 같이 선언 후 Log.{logLevel}({message}); 형식으로 로그 사용
     /// 
     ///  Log.CreateConfiguration()
