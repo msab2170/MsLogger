@@ -16,7 +16,7 @@ namespace MsLogger
     ///        .IsAdditionalErrorLogFileEnabled(true)                                          // 로그레빌이 Error이상 로그만 기록하는 로그파일을 추가 생성
     ///        .ErrorLogPath(APP_NAME + "_Error_Logs")                        // 로그레빌이 Error이상 로그만 기록하는 로그파일을 위치시킬 폴더의 경로 (절대/상대 경로)
     ///        .ErrorLogFileNameWithoutExtension(APP_NAME + "_Error")  // 로그레빌이 Error이상 로그만 기록하는 로그파일의 이름(확장자는 자동으로 추가되므로 기입해도 .xxx.log파일이 생성됨)
-    ///        .MinimumLogLevel(Log.LogLevel.Verbose)                        // 기록할 최소로그레벨
+    ///        .MinimumLogLevel(LogLevel.Verbose)                        // 기록할 최소로그레벨
     ///        .WriteConsole(true);                                                    // 콘솔에도 보이게 할지 여부
     ///        .LogFileSizeLimit()                                                       // 최대 로그파일 크기
     ///        .LogFileCountLimitEnabled()                                          // 로그파일 갯수 제한 여부
@@ -223,7 +223,7 @@ namespace MsLogger
         ///        .IsAdditionalErrorLogFileEnabled(true)                             // 로그레빌이 Error이상 로그만 기록하는 로그파일을 추가 생성
         ///        .ErrorLogFileDirectory(APP_NAME + "_Error_Logs")             // 로그레빌이 Error이상 로그만 기록하는 로그파일을 위치시킬 폴더의 경로 (절대/상대 경로)
         ///        .ErrorLogFileNameWithoutExtension(APP_NAME + "_Error")  // 로그레빌이 Error이상 로그만 기록하는 로그파일의 이름(확장자는 자동으로 추가되므로 기입해도 .xxx.log파일이 생성됨)
-        ///        .MinimumLogLevel(Log.LogLevel.Verbose)                        // 기록할 최소로그레벨
+        ///        .MinimumLogLevel(LogLevel.Verbose)                        // 기록할 최소로그레벨
         ///        .WriteConsole(true);                                                    // 콘솔에도 보이게 할지 여부
         ///        .LogFileSizeLimit()                                                       // 최대 로그파일 크기
         ///        .LogFileCountLimitEnabled()                                          // 로그파일 갯수 제한 여부
