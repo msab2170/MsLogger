@@ -28,3 +28,6 @@
     ///         
     /// # 에러로그만 수집을 원한다면 IsAdditionalErrorLogFileEnabled 옵션을 false로 설정하고 MinimumLogLevel에서 최소로그레벨을 올리는 것을 권장
     /// </summary>
+
+    /// unit test 결과
+![image](https://github.com/user-attachments/assets/90c13997-c81f-4264-a5d2-495f60ab1fb6)
