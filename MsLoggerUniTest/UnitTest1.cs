@@ -30,7 +30,12 @@ namespace UniTestForMSLog
                     .LogFileCountLimitEnabled(true)                                                 // 로그파일 갯수 제한 여부
                     .RollingCountLimit(30);                                                             // 제한할 로그파일 갯수
         }
+        /*
+            테스트는 파일이 생성된 파일 내 마지막 줄까지 확인하는 것이 바람직하나, 
+            여기서는 콘솔에 적힌 출력된 로그와 예상되는 라인을 비교하는 것으로 간소화 하였다.
+        */
 
+        
         /// <summary>
         /// Log.Verbose 테스트
         /// </summary>
