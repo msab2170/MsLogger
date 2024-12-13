@@ -173,7 +173,7 @@ namespace MsLogger
 
                 if (_logFileCountLimitEnabled)
                 {
-                    var logFiles = Directory.GetFiles(logDirectory, $"{_logFileName}*.log")
+                    var logFiles = Directory.GetFiles(logDirectory, $"{_logFileName} (*).log")
                                             .OrderBy(f => new FileInfo(f).LastWriteTimeUtc)
                                             .ToList();
 
