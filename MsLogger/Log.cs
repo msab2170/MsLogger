@@ -8,19 +8,19 @@ namespace MsLogger
 {
     /// <summary>
     /// 2024-10-22 작성
-    /// 아래와 같이 선언 후 Log.{logLevel}({message}); 형식으로 로그 사용
+    /// Declare as shown below and use the log in the format Log.{logLevel}({message});
     /// 
     ///  Log.CreateConfiguration()
     ///        .LogPath(APP_NAME + "_Logs")                           // The path to the folder where the log files will be stored (Absolute /Relative path)
     ///        .LogFileNameWithoutExtension(APP_NAME)                 // The name of log file without extension (The extension is automatically added, so even if specified, a file with the name format .xxx.log will be created.)
     ///        .IsAdditionalErrorLogFileEnabled(true)                 // Whether to create an additional log file that records only logs of Error level or higher. 로그레벨이 Error이상 로그만 기록하는 로그파일을 추가 생성
-    ///        .ErrorLogPath(APP_NAME + "_Error_Logs")                // 로그레벨이 Error이상 로그만 기록하는 로그파일을 위치시킬 폴더의 경로 (절대/상대 경로)
-    ///        .ErrorLogFileNameWithoutExtension(APP_NAME + "_Error") // 로그레벨이 Error이상 로그만 기록하는 로그파일의 이름(확장자는 자동으로 추가되므로 기입해도 .xxx.log파일이 생성됨)
+    ///        .ErrorLogPath(APP_NAME + "_Error_Logs")                // The path to the folder where the log files that records only logs of Error level or higher will be stored (Absolute /Relative path) 로그레벨이 Error이상 로그만 기록하는 로그파일을 위치시킬 폴더의 경로 (절대/상대 경로)
+    ///        .ErrorLogFileNameWithoutExtension(APP_NAME + "_Error") // The name of log file that records only logs of Error level or higher name without extension (The extension is automatically added, so even if specified, a file with the name format .xxx.log will be created.) 로그레벨이 Error이상 로그만 기록하는 로그파일의 이름(확장자는 자동으로 추가되므로 기입해도 .xxx.log파일이 생성됨)
     ///        .MinimumLogLevel(LogLevel.Verbose)                     // Miminum log level 기록할 최소로그레벨
     ///        .WriteConsole(true);                                   // Whether write log text to console 콘솔에도 보이게 할지 여부
-    ///        .LogFileSizeLimit()                                    // 최대 로그파일 크기
-    ///        .LogFileCountLimitEnabled()                            // 로그파일 갯수 제한 여부
-    ///        .RollingCountLimit()                                   // 제한할 로그파일 갯수
+    ///        .LogFileSizeLimit()                                    // Maximum log file size 최대 로그파일 크기
+    ///        .LogFileCountLimitEnabled()                            // Whether to limit the number of log files 로그파일 갯수 제한 여부
+    ///        .RollingCountLimit()                                   // The number of log file to limit 제한할 로그파일 갯수
     ///        
     ///         If not specified as above, the default value will be applied, and the default value is as follows:
     ///         LogPath                                               - Path.Combine(Environment.CurrentDirectory, "Logs")
