@@ -199,16 +199,12 @@ namespace MsLogger
                 {
                     // 정규 표현식으로 숫자 부분 추출
                     var match = Regex.Match(fileName, @"\(\d+");
-                    if (match.Success)
+                    if (match.Success  && int.TryParse(match.Value.Substring(1), out int index))
                     {
-                        if (int.TryParse(match.Value.Substring(1), out int index))
-                        {
-                            maxIndex = Math.Max(maxIndex, index);
-                        }
-                    }
+                        maxIndex = Math.Max(maxIndex, index);
+                    }              
                 }
             }
-
             return maxIndex; // 다음 인덱스 반환
         }
 
