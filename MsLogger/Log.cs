@@ -61,7 +61,7 @@ namespace MsLogger
         /// if you want to write messages on console, '_writeConsole' must be true.
         /// </summary>
         private static bool _writeConsole = true;
-        private static int _logFileSizeLimit = 5_120_000;
+        private static int _logFileSizeLimit = 51_200_000;
         private static bool _logFileCountLimitEnabled = false;
         private static int _rollingCountLimit = 30;
 
