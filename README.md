@@ -22,7 +22,7 @@
     ///         ErrorLogFileNameWithoutExtension           - "log_Error"
     ///         MinimumLogLevel                            - LogLevel.Infomation
     ///         WriteConsole                               - true
-    ///         LogFileSizeLimit                           - 5_120_000
+    ///         LogFileSizeLimit                           - 51_200_000
     ///         LogFileCountLimitEnabled                   - false
     ///         RollingCountLimit                          - 30
     ///         
