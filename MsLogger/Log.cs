@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -7,57 +7,66 @@ using System.Text.RegularExpressions;
 namespace MsLogger
 {
     /// <summary>
-    /// 2024-10-22 작성
-    /// Declare as shown below and use the log in the format Log.{logLevel}({message});
+    /// 2024-10-22 mskim 작성
+    /// 아래와 같이 선언 후 Log.{logLevel}({message}); 형식으로 로그 사용
     /// 
     ///  Log.CreateConfiguration()
-    ///        .LogPath(APP_NAME + "_Logs")                           // The path to the folder where the log files will be stored (Absolute /Relative path)
-    ///        .LogFileNameWithoutExtension(APP_NAME)                 // The name of log file without extension (The extension is automatically added, so even if specified, a file with the name format .xxx.log will be created.)
-    ///        .IsAdditionalErrorLogFileEnabled(true)                 // Whether to create an additional log file that records only logs of Error level or higher. 로그레벨이 Error이상 로그만 기록하는 로그파일을 추가 생성
-    ///        .ErrorLogPath(APP_NAME + "_Error_Logs")                // The path to the folder where the log files that records only logs of Error level or higher will be stored (Absolute /Relative path) 로그레벨이 Error이상 로그만 기록하는 로그파일을 위치시킬 폴더의 경로 (절대/상대 경로)
-    ///        .ErrorLogFileNameWithoutExtension(APP_NAME + "_Error") // The name of log file that records only logs of Error level or higher name without extension (The extension is automatically added, so even if specified, a file with the name format .xxx.log will be created.) 로그레벨이 Error이상 로그만 기록하는 로그파일의 이름(확장자는 자동으로 추가되므로 기입해도 .xxx.log파일이 생성됨)
-    ///        .MinimumLogLevel(LogLevel.Verbose)                     // Miminum log level 기록할 최소로그레벨
-    ///        .WriteConsole(true);                                   // Whether write log text to console 콘솔에도 보이게 할지 여부
-    ///        .LogFileSizeLimit()                                    // Maximum log file size 최대 로그파일 크기
-    ///        .LogFileCountLimitEnabled()                            // Whether to limit the number of log files 로그파일 갯수 제한 여부
-    ///        .RollingCountLimit()                                   // The number of log file to limit 제한할 로그파일 갯수
+    ///        .LogPath(APP_NAME + "_Logs")                            // 로그파일을 위치시킬 폴더의 경로 (절대/상대 경로)
+    ///        .LogFileNameWithoutExtension(APP_NAME)                  // 로그파일의 이름(확장자는 자동으로 추가되므로 기입해도 .xxx.log파일이 생성됨)
+    ///        .IsAdditionalErrorLogFileEnabled(true)                  // 로그레빌이 Error이상 로그만 기록하는 로그파일을 추가 생성
+    ///        .ErrorLogPath(APP_NAME + "_Error_Logs")                 // 로그레빌이 Error이상 로그만 기록하는 로그파일을 위치시킬 폴더의 경로 (절대/상대 경로)
+    ///        .ErrorLogFileNameWithoutExtension(APP_NAME + "_Error")  // 로그레빌이 Error이상 로그만 기록하는 로그파일의 이름(확장자는 자동으로 추가되므로 기입해도 .xxx.log파일이 생성됨)
+    ///        .MinimumLogLevel(Log.LogLevel.Verbose)                  // 기록할 최소로그레벨
+    ///        .WriteConsole(true);                                    // 콘솔에도 보이게 할지 여부
+    ///        .LogFileSizeLimit()                                     // 최대 로그파일 크기
+    ///        .LogFileCountLimitEnabled()                             // 로그파일 갯수 제한 여부
+    ///        .RollingCountLimit()                                    // 제한할 로그파일 갯수
     ///        
-    ///         If not specified as above, the default value will be applied, and the default value is as follows:
-    ///         LogPath                                               - Path.Combine(Environment.CurrentDirectory, "Logs")
-    ///         LogFileNameWithoutExtension                           -  "log"
-    ///         IsAdditionalErrorLogFileEnabled                       - true
-    ///         ErrorLogPath                                          - Path.Combine(Environment.CurrentDirectory, "ErrorLogs")
-    ///         ErrorLogFileNameWithoutExtension                      - "log_Error"
-    ///         MinimumLogLevel                                       - LogLevel.Infomation
-    ///         WriteConsole                                          - true
-    ///         LogFileSizeLimit                                      - 51_200_000
-    ///         LogFileCountLimitEnabled                              - false
-    ///         RollingCountLimit                                     - 30
+    ///         위와 같이 작성하지 않는 경우 기본값으로 적용, 기본값은 아래와 같음
+    ///         LogPath                                                - Path.Combine(Environment.CurrentDirectory, "Logs")
+    ///         LogFileNameWithoutExtension                            - "log"
+    ///         IsAdditionalErrorLogFileEnabled                        - true
+    ///         ErrorLogPath                                           - Path.Combine(Environment.CurrentDirectory, "ErrorLogs")
+    ///         ErrorLogFileNameWithoutExtension                       - "log_Error"
+    ///         MinimumLogLevel                                        - LogLevel.Infomation
+    ///         WriteConsole                                           - true
+    ///         LogFileSizeLimit                                       - 51_200_000
+    ///         LogFileCountLimitEnabled                               - false
+    ///         RollingCountLimit                                      - 30
     ///         
-    ///         You can use this dll like:
-    ///         string exception = "error message";
-    ///         Log.Information("hi");
-    ///         Log.Error($"error occurred {exception}");
-    ///         Log.Fatal("fatal error occurred {0}", exception);
     /// # 에러로그만 수집을 원한다면 IsAdditionalErrorLogFileEnabled 옵션을 false로 설정하고 MinimumLogLevel에서 최소로그레벨을 올리는 것을 권장
     /// </summary>
     public class Log
     {
         private static readonly object lockObject = new object();
-        public static LogConfiguration CreateConfiguration() => new LogConfiguration();
-        private static LogLevel _minimumLogLevel = LogLevel.Information;
-        
+        /// <summary>
+        /// name of log file
+        /// </summary>
         private static string _logFileName = "log";
+
+        /// <summary>
+        /// name of error log file. if you want to create addtional error log file, the option '_isAdditionalErrorLogFileEnabled' must be true.
+        /// </summary>
         private static string _errorLogFileName = $"log_Error";
         private static string _logFileDirectory = Path.Combine(Environment.CurrentDirectory, "Logs");
-        private static string _errorlogFileDirectory = Path.Combine(Environment.CurrentDirectory, "ErrorLogs");        
+        private static string _errorlogFileDirectory = Path.Combine(Environment.CurrentDirectory, "ErrorLogs");
+        private static LogLevel _minimumLogLevel = LogLevel.Information;
+
+        /// <summary>
+        /// create addtional error log file. 
+        /// </summary>
         private static bool _isAdditionalErrorLogFileEnabled = true;
+
+        /// <summary>
+        /// if you want to write messages on console, '_writeConsole' must be true.
+        /// </summary>
         private static bool _writeConsole = true;
         private static int _logFileSizeLimit = 51_200_000;
         private static bool _logFileCountLimitEnabled = false;
         private static int _rollingCountLimit = 30;
-                
-        
+
+        public static LogConfiguration CreateConfiguration() => new LogConfiguration();
+
         private static void Logger(LogLevel logLevel, string message)
         {
             if (logLevel >= _minimumLogLevel)
@@ -71,74 +80,50 @@ namespace MsLogger
                 }
             }
         }
-
-        
         public static void Verbose(string message)
         {
             Logger(LogLevel.Verbose, message);
         }
-
-        
         public static void Verbose(string message, params object[] args)
         {
             Verbose(String.Format(message, args));
         }
-
-        
         public static void Debug(string message)
         {
             Logger(LogLevel.Debug, message);
         }
-
-        
         public static void Debug(string message, params object[] args)
         {
             Debug(String.Format(message, args));
         }
-
-        
         public static void Information(string message)
         {
             Logger(LogLevel.Information, message);
         }
-
-        
         public static void Information(string message, params object[] args)
         {
             Information(String.Format(message, args));
         }
-
-        
         public static void Warning(string message)
         {
             Logger(LogLevel.Warning, message);
         }
-
-        
         public static void Warning(string message, params object[] args)
         {
             Warning(String.Format(message, args));
         }
-
-        
         public static void Error(string message)
         {
             Logger(LogLevel.Error, message);
         }
-
-        
         public static void Error(string message, params object[] args)
         {
             Error(String.Format(message, args));
         }
-
-        
         public static void Fatal(string message)
         {
             Logger(LogLevel.Fatal, message);
         }
-
-        
         public static void Fatal(string message, params object[] args)
         {
             Fatal(String.Format(message, args));
@@ -158,7 +143,6 @@ namespace MsLogger
                 string logFilePath = Path.Combine(logDirectory, logFileName + ".log");
                 FileInfo file = new FileInfo(logFilePath);
 
-                
                 //Check FileSize
                 if (file.Exists && file.Length > _logFileSizeLimit)
                 {
@@ -171,8 +155,7 @@ namespace MsLogger
                     File.Move(logFilePath, oldFile);
                 }
 
-                
-                //Write Log TExt
+                //Write Log
                 // logStringBuilder.Append($"{dataTimeNow:yyyy-MM-dd HH:mm:ss.fff} [{logLevel}] {message}");
                 var logStringBuilder = new StringBuilder();
                 logStringBuilder.Append(dataTimeNow.ToString("yyyy-MM-dd HH:mm:ss.fff"));
@@ -181,20 +164,13 @@ namespace MsLogger
                 logStringBuilder.Append("] ");
                 logStringBuilder.Append(message);
                 logStringBuilder.Append(Environment.NewLine);
-
-
-                // Write To File
                 File.AppendAllText(logFilePath, logStringBuilder.ToString());
-
-                
-                // Write To Console
                 if (_writeConsole && logDirectory == _logFileDirectory)
                 {
                     Console.WriteLine(logStringBuilder.ToString());
                 }
 
 
-                // delete lowest number log file for Log file count limitation
                 if (_logFileCountLimitEnabled)
                 {
                     var logFiles = Directory.GetFiles(logDirectory, $"{_logFileName} (*).log")
@@ -204,7 +180,7 @@ namespace MsLogger
                     while (logFiles.Count() > _rollingCountLimit)
                     {
                         File.Delete(logFiles[0]);
-                        logFiles.RemoveAt(0); // delete the oldest file (lowest number file)
+                        logFiles.RemoveAt(0); // 가장 오래된 파일 제거
                     }
                 }
             }
@@ -213,29 +189,51 @@ namespace MsLogger
         private static int GetLastLogFileIndex(string logDirectory, string logFileName)
         {
             int maxIndex = 0;
-            string pattern = $@"{logFileName} \(\d+\)\.log$"; // "({numeric}).log" pattern
+            string pattern = $@"{logFileName} \((\d+)\)\.log$"; // "(숫자).log" 패턴
 
-            // Get the list of existing files and find the index
+            // 기존 파일 목록을 가져와서 인덱스를 찾기
             foreach (var file in Directory.GetFiles(logDirectory))
             {
                 string fileName = Path.GetFileName(file);
-                if (Regex.IsMatch(fileName, pattern))
+                Match match = Regex.Match(fileName, pattern);
+                if (match.Success && int.TryParse(match.Groups[1].Value, out int index))
                 {
-                    // Extract numbers from a string with regular expressions
-                    var match = Regex.Match(fileName, @"\(\d+");
-                    if (match.Success  && int.TryParse(match.Value.Substring(1), out int index))
-                    {
-                        maxIndex = Math.Max(maxIndex, index);
-                    }              
+                    maxIndex = Math.Max(maxIndex, index);
                 }
             }
-            return maxIndex; 
+            return maxIndex; // 다음 인덱스 반환
         }
 
 
         /// <summary>
         /// you can change the field of Log by using LogConfiguration.
-        /// It should be an inner class so that it can modify the private properties of Log class while allowing users to call the public members of LogConfiguration class.
+        ///  
+        /// [here is example]
+        ///  Log.CreateConfiguration()
+        ///        .LogFileDirectory(APP_NAME + "_Logs")                          // 로그파일을 위치시킬 폴더의 경로 (절대/상대 경로)
+        ///        .LogFileNameWithoutExtension(APP_NAME)                     // 로그파일의 이름(확장자는 자동으로 추가되므로 기입해도 .xxx.log파일이 생성됨)
+        ///        .IsAdditionalErrorLogFileEnabled(true)                             // 로그레빌이 Error이상 로그만 기록하는 로그파일을 추가 생성
+        ///        .ErrorLogFileDirectory(APP_NAME + "_Error_Logs")             // 로그레빌이 Error이상 로그만 기록하는 로그파일을 위치시킬 폴더의 경로 (절대/상대 경로)
+        ///        .ErrorLogFileNameWithoutExtension(APP_NAME + "_Error")  // 로그레빌이 Error이상 로그만 기록하는 로그파일의 이름(확장자는 자동으로 추가되므로 기입해도 .xxx.log파일이 생성됨)
+        ///        .MinimumLogLevel(LogLevel.Verbose)                        // 기록할 최소로그레벨
+        ///        .WriteConsole(true);                                                    // 콘솔에도 보이게 할지 여부
+        ///        .LogFileSizeLimit()                                                       // 최대 로그파일 크기
+        ///        .LogFileCountLimitEnabled()                                          // 로그파일 갯수 제한 여부
+        ///        .RollingCountLimit()                                                     // 제한할 로그파일 갯수
+        ///        
+        ///         위와 같이 작성하지 않는 경우 기본값으로 적용, 기본값은 아래와 같음
+        ///         LogFileDirectory                          - Path.Combine(Environment.CurrentDirectory, "Logs")
+        ///         LogFileNameWithoutExtension       -  "log"
+        ///         IsAdditionalErrorLogFileEnabled      - true
+        ///         ErrorLogFileDirectory                    - Path.Combine(Environment.CurrentDirectory, "ErrorLogs")
+        ///         ErrorLogFileNameWithoutExtension - "log_Error"
+        ///         MinimumLogLevel                       - LogLevel.Infomation
+        ///         WriteConsole                             - true
+        ///         LogFileSizeLimit                          - 5_120_000
+        ///         LogFileCountLimitEnabled             - false
+        ///         RollingCountLimit                        - 10
+        ///         
+        /// # 에러로그만 수집을 원한다면 AdditionalErrorLogFile 옵션을 false로 설정하고 MinimumLogLevel에서 최소로그레벨을 올리는 것을 권장
         /// </summary>
         public class LogConfiguration
         {
@@ -314,6 +312,7 @@ namespace MsLogger
                 Log._rollingCountLimit = rollingCountLimit;
                 return this;
             }
+
         }
     }
 
