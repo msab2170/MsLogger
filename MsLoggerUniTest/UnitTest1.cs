@@ -10,11 +10,11 @@ namespace UniTestForMSLog
     public class UnitTest1
     {
         public static readonly string APP_NAME = typeof(UnitTest1).Namespace;
-        private readonly int _LogFileSizeLimit = 5; //51_200_000;
+        private readonly int _LogFileSizeLimit = 51_200_000;
         private readonly string _LogDirectory = APP_NAME + "_Logs";
         private readonly string _LogFileName = $"{APP_NAME}-{DateTime.Now:yyyyMMdd}";
         private readonly string _LogFilePath = Path.Combine(APP_NAME + "_Logs", $"{APP_NAME}-{DateTime.Now:yyyyMMdd}.log");
-        private readonly bool _WriteToConsole = true; // true;
+        private readonly bool _WriteToConsole = true; 
 
 
         private readonly string _Verbose = "verbose log";
@@ -53,7 +53,7 @@ namespace UniTestForMSLog
                 Log.Verbose(_Verbose);
 
 
-                var result = sw.ToString().Trim(); // 콘솔에 출력된 내용 가져오기
+                var result = sw.ToString().Trim(); 
                 Match match = Regex.Match(result, $"{_LogPattern}{_Verbose}");
                 Assert.IsTrue(match.Success && match.Groups[1].Value == "Verbose");
             }
@@ -85,7 +85,7 @@ namespace UniTestForMSLog
                 Log.Verbose(_Verbose + " {0}, {1}", "변수1", "변수2");
 
 
-                var result = sw.ToString().Trim(); // 콘솔에 출력된 내용 가져오기
+                var result = sw.ToString().Trim();
                 Match match = Regex.Match(result, $"{_LogPattern}{_Verbose} 변수1, 변수2");
                 Assert.IsTrue(match.Success && match.Groups[1].Value == "Verbose");
             }
@@ -117,7 +117,7 @@ namespace UniTestForMSLog
                 Log.Debug(_Debug);
 
 
-                var result = sw.ToString().Trim(); // 콘솔에 출력된 내용 가져오기
+                var result = sw.ToString().Trim(); 
                 Match match = Regex.Match(result, $"{_LogPattern}{_Debug}");
                 Assert.IsTrue(match.Success && match.Groups[1].Value == "Debug");
 
@@ -148,7 +148,7 @@ namespace UniTestForMSLog
                 Log.Debug(_Debug + " {0}, {1}", "변수1", "변수2");
 
 
-                var result = sw.ToString().Trim(); // 콘솔에 출력된 내용 가져오기
+                var result = sw.ToString().Trim(); 
                 Match match = Regex.Match(result, $"{_LogPattern}{_Debug} 변수1, 변수2");
                 Assert.IsTrue(match.Success && match.Groups[1].Value == "Debug");
             }
@@ -180,7 +180,7 @@ namespace UniTestForMSLog
                 Log.Information(_Information);
 
 
-                var result = sw.ToString().Trim(); // 콘솔에 출력된 내용 가져오기
+                var result = sw.ToString().Trim(); 
                 Match match = Regex.Match(result, $"{_LogPattern}{_Information}");
                 Assert.IsTrue(match.Success && match.Groups[1].Value == "Information");
 
@@ -212,7 +212,7 @@ namespace UniTestForMSLog
                 Log.Information(_Information + " {0}, {1}", "변수1", "변수2");
 
 
-                var result = sw.ToString().Trim(); // 콘솔에 출력된 내용 가져오기
+                var result = sw.ToString().Trim(); 
                 Match match = Regex.Match(result, $"{_LogPattern}{_Information} 변수1, 변수2");
                 Assert.IsTrue(match.Success && match.Groups[1].Value == "Information");
             }
@@ -224,6 +224,8 @@ namespace UniTestForMSLog
         public void InformationFormatFile()
         {
             Log.Information(_Information + " {0}, {1}", "변수1", "변수2");
+
+            
             string[] lines = File.ReadAllLines(_LogFilePath);
             var result = lines[lines.Length - 1];
             Match match = Regex.Match(result, $"{_LogPattern}{_Information} 변수1, 변수2");
@@ -243,7 +245,7 @@ namespace UniTestForMSLog
                 Log.Warning(_Warning);
 
 
-                var result = sw.ToString().Trim(); // 콘솔에 출력된 내용 가져오기
+                var result = sw.ToString().Trim(); 
                 Match match = Regex.Match(result, $"{_LogPattern}{_Warning}");
                 Assert.IsTrue(match.Success && match.Groups[1].Value == "Warning");
 
@@ -275,7 +277,7 @@ namespace UniTestForMSLog
                 Log.Warning(_Warning + " {0}, {1}", "변수1", "변수2");
 
 
-                var result = sw.ToString().Trim(); // 콘솔에 출력된 내용 가져오기
+                var result = sw.ToString().Trim(); 
                 Match match = Regex.Match(result, $"{_LogPattern}{_Warning} 변수1, 변수2");
                 Assert.IsTrue(match.Success && match.Groups[1].Value == "Warning");
             }
@@ -305,7 +307,7 @@ namespace UniTestForMSLog
                 Log.Error(_Error);
 
 
-                var result = sw.ToString().Trim(); // 콘솔에 출력된 내용 가져오기
+                var result = sw.ToString().Trim(); 
                 Match match = Regex.Match(result, $"{_LogPattern}{_Error}");
                 Assert.IsTrue(match.Success && match.Groups[1].Value == "Error");
 
@@ -337,7 +339,7 @@ namespace UniTestForMSLog
                 Log.Error(_Error + " {0}, {1}", "변수1", "변수2");
 
 
-                var result = sw.ToString().Trim(); // 콘솔에 출력된 내용 가져오기
+                var result = sw.ToString().Trim(); 
                 Match match = Regex.Match(result, $"{_LogPattern}{_Error} 변수1, 변수2");
                 Assert.IsTrue(match.Success && match.Groups[1].Value == "Error");
             }
@@ -369,7 +371,7 @@ namespace UniTestForMSLog
                 Log.Fatal(_Fatal);
 
 
-                var result = sw.ToString().Trim(); // 콘솔에 출력된 내용 가져오기
+                var result = sw.ToString().Trim(); 
                 Match match = Regex.Match(result, $"{_LogPattern}{_Fatal}");
                 Assert.IsTrue(match.Success && match.Groups[1].Value == "Fatal");
 
@@ -403,7 +405,7 @@ namespace UniTestForMSLog
                 Log.Fatal(_Fatal + " {0}, {1}", "변수1", "변수2");
 
 
-                var result = sw.ToString().Trim(); // 콘솔에 출력된 내용 가져오기          
+                var result = sw.ToString().Trim();          
                 Match match = Regex.Match(result, $"{_LogPattern}{_Fatal} 변수1, 변수2");
                 Assert.IsTrue(match.Success && match.Groups[1].Value == "Fatal");
             }
